@@ -1,4 +1,4 @@
-def _is_located_correctly(ship_location):
+def _is_located_correctly(ship_location, user_field):
 
     def _is_same_values(some_list):
         first = some_list[0]
@@ -17,6 +17,7 @@ def _is_located_correctly(ship_location):
         columns.append(cell[0])
         rows.append(cell[1])
 
+
     if _is_same_values(columns):
         rows = [int(i) for i in sorted(rows)]
 
@@ -29,8 +30,32 @@ def _is_located_correctly(ship_location):
         return True
 
 
-    return False
+    elif _is_same_values(rows):
+        ship_location = sorted(ship_location)
+        user_field = list(user_field.field.keys())
+
+        for idx, cell in enumerate(ship_location):
+            if cell == ship_location[-1] or user_field.index(ship_location[idx+1]) - user_field.index(cell) == 1:
+                pass
+            else:
+                return False
+
+        return True
+
+
+    else:
+        return False
+
+
 
 
     # if _is_same_values(rows):
     #     columns = sorted(columns)
+    #
+    #     for n in columns:
+    #         if n user_field or n[idx+1] - idx:
+    #             pass
+    #         else:
+    #             return False
+    #
+    #     return True

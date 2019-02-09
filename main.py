@@ -70,7 +70,7 @@ def ship_placement(ships, user_field, PC_field):
                     cell = input('Place a ship of size {} on the field: '.format(ship.size))
                     ship_location.append(cell)
 
-                if not _is_located_correctly(ship_location):
+                if not _is_located_correctly(ship_location, user_field):
                     print('\nIncorrect location!\n')
 
                     return place(ship, ship_location)
