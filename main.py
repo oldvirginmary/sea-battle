@@ -8,11 +8,13 @@ from sources import (
 
 from handlers import (
     _is_located_correctly,
+    _input_columns,
+    _input_rows
 )
 
 
 def make_players():
-    user = User(input('Input username: '))
+    user = User(input('\nInput username: '))
     print('Let\'s battle, {}!'.format(user.name))
 
     PC = User('PC')
@@ -57,39 +59,33 @@ def make_ships():
 def ship_placement(ships, user_field, PC_field):
 
     for ship in ships:
-        ship_location = []
-
-
         if ship.owner == 'user':
 
-            def place(ship, ship_location):
+            def placement(ship):
+                user_field.display_field(ships)
+                print('Place a ship of size {} on the field'.format(ship.size))
+                ship._columns = []
+                ship._rows = []
 
-                user_field.display_field()
+                for size in range(ship.size):
+                    ship._columns.append(_input_columns())
+                    ship._rows.append(_input_rows())
 
-                for cells in range(ship.size):
-                    cell = input('Place a ship of size {} on the field: '.format(ship.size))
-                    ship_location.append(cell)
-
-                if not _is_located_correctly(ship_location, user_field):
+                if not _is_located_correctly(ship, user_field):
                     print('\nIncorrect location!\n')
+                    return placement(ship)
 
-                    return place(ship, ship_location)
+                ship.arrange_ship()
 
-            place(ship, ship_location)
-
-            user_field.arrange_ship(ship_location)
-            ship.location = ship_location
+            placement(ship)
 
 
         elif ship.owner == 'PC':
-            ship_location = random.choice(list(PC_field.field.keys()))
+            ship.location = random.choice(list(PC_field.field.keys()))
 
-            PC_field.arrange_ship(ship_location)
 
-            ship.location = ship_location
-
-    user_field.display_field()
-    PC_field.display_field()
+    user_field.display_field(ships)
+    PC_field.display_field(ships)
 
 
 def main():

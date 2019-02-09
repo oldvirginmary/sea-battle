@@ -10,13 +10,13 @@ class Field:
         self.field = self.make_field()
 
 
-    def arrange_ship(self, ship_location):
-        for cell in ship_location:
-            self.field[cell] = 'o'
+    def display_field(self, ships):
 
+        for ship in ships:
+            for place in ship.location:
+                    self.field[place] = 'o'
 
-    def display_field(self):
-        print('Field of {}:'.format(self.owner))
+        print('\nField of {}:'.format(self.owner))
         print('''
              A   B   C   D   E   F   G   H   I   J
            +---+---+---+---+---+---+---+---+---+---+
@@ -47,7 +47,7 @@ class Field:
     @staticmethod
     def make_field():
 
-        columns = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
+        columns = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
         rows = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
         cells = []
 
@@ -66,4 +66,12 @@ class Ship(Field):
         self.size = size
         self.name = name
         self.owner = owner
-        self.location = None
+        self.location = []
+
+        self._columns = []
+        self._rows = []
+
+
+    def arrange_ship(self):
+        for idx, column in enumerate(self._columns):
+            self.location.append(str(column) + str(self._rows[idx]))
