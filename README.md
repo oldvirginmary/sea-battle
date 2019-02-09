@@ -1,1 +1,1 @@
-# sea_battle
+# sea-battle
