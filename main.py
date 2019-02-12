@@ -64,18 +64,21 @@ def ship_placement(ships, user_field, PC_field):
             def placement(ship):
                 user_field.display_field(ships)
                 print('Place a ship of size {} on the field'.format(ship.size))
-                ship._columns = []
-                ship._rows = []
 
                 for size in range(ship.size):
                     ship._columns.append(_input_columns())
                     ship._rows.append(_input_rows())
+                    ship.make_location()
 
                 if not _is_located_correctly(ship, user_field):
                     print('\nIncorrect location!\n')
+                    ship.location = []
+                    ship._columns = []
+                    ship._rows = []
                     return placement(ship)
 
-                ship.arrange_ship()
+                user_field.make_ship_field(ship)
+
 
             placement(ship)
 

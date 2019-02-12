@@ -19,8 +19,6 @@ def _is_located_correctly(ship, user_field):
             else:
                 return False
 
-        return True
-
     elif _is_same_values(ship._rows):
         ship._columns = [int(i) for i in sorted(ship._columns)]
 
@@ -30,20 +28,22 @@ def _is_located_correctly(ship, user_field):
             else:
                 return False
 
-        return True
-
     else:
-        print(ship._columns, ship._rows)
         return False
+
+    for square in ship.location:
+        if square in user_field._ships_field:
+            return False
+
+    return True
 
 
 def _input_columns():
     nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
 
-    letter = input('Column: ')
-
     try:
+        letter = input('Column: ').lower()
         return nums[letters.index(letter)]
     except ValueError:
         print('\nIncorrect column! Expected: A - J\n')
