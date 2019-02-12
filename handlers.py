@@ -2,11 +2,9 @@ def _is_located_correctly(ship, field):
 
     def _is_same_values(some_list):
         first = some_list[0]
-
         for i in some_list:
             if i != first:
                 return False
-
         return True
 
 
@@ -25,7 +23,7 @@ def _is_located_correctly(ship, field):
     elif _is_same_values(ship._rows):
         ship._columns = [int(i) for i in sorted(ship._columns)]
 
-        if len(ship._rows) != len(set(ship._rows)):
+        if len(ship._columns) != len(set(ship._columns)):
             return False
 
         for idx, n in enumerate(ship._columns):

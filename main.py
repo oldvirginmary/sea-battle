@@ -58,6 +58,7 @@ def make_ships():
 
     # return u10_4, u9_3, u8_3, u7_2, u6_2, u5_2, u4_1, u3_1, u2_1, u1_1
     return pc10_4, pc9_3, pc8_3, pc7_2, pc6_2, pc5_2, pc4_1, pc3_1, pc2_1, pc1_1
+    # return pc5_2, pc1_1
 
 
 def ship_placement(ships, user_field, PC_field):
@@ -91,8 +92,6 @@ def ship_placement(ships, user_field, PC_field):
 
             def PC_placement(ship):
                 position = random.choice(['horizontal', 'vertical'])
-
-                print('get {}: '.format(position))
 
                 ship._columns, ship._rows = generation(ship, position)
                 ship.make_location()
