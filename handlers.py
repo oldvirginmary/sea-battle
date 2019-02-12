@@ -1,4 +1,4 @@
-def _is_located_correctly(ship, user_field):
+def _is_located_correctly(ship, field):
 
     def _is_same_values(some_list):
         first = some_list[0]
@@ -13,6 +13,9 @@ def _is_located_correctly(ship, user_field):
     if _is_same_values(ship._columns):
         ship._rows = [int(i) for i in sorted(ship._rows)]
 
+        if len(ship._rows) != len(set(ship._rows)):
+            return False
+
         for idx, n in enumerate(ship._rows):
             if n == ship._rows[-1] or ship._rows[idx+1] - n == 1:
                 pass
@@ -21,6 +24,9 @@ def _is_located_correctly(ship, user_field):
 
     elif _is_same_values(ship._rows):
         ship._columns = [int(i) for i in sorted(ship._columns)]
+
+        if len(ship._rows) != len(set(ship._rows)):
+            return False
 
         for idx, n in enumerate(ship._columns):
             if n == ship._columns[-1] or ship._columns[idx+1] - n == 1:
@@ -32,7 +38,7 @@ def _is_located_correctly(ship, user_field):
         return False
 
     for square in ship.location:
-        if square in user_field._ships_field:
+        if square in field._ships_field:
             return False
 
     return True

@@ -10,9 +10,6 @@ class Field:
         self.field = self.make_field()
         self._ships_field = []
 
-        self._ships_by_columns = []
-        self._ships_by_rows = []
-
 
     def make_ship_field(self, ship):
         for idx, column in enumerate(ship._columns):
