@@ -8,10 +8,11 @@ class Field:
     def __init__(self, owner):
         self.owner = owner.name
         self.field = self.make_field()
+
         self._ships_field = []
 
 
-    def make_ship_field(self, ship):
+    def _make_ship_field(self, ship):
         for idx, column in enumerate(ship._columns):
             self._ships_field.append(str(column + 1) + str(ship._rows[idx] + 1))
             self._ships_field.append(str(column - 1) + str(ship._rows[idx] - 1))
@@ -19,6 +20,8 @@ class Field:
             self._ships_field.append(str(column - 1) + str(ship._rows[idx] + 1))
             self._ships_field.append(str(column) + str(ship._rows[idx] + 1))
             self._ships_field.append(str(column) + str(ship._rows[idx] - 1))
+            self._ships_field.append(str(column + 1) + str(ship._rows[idx]))
+            self._ships_field.append(str(column - 1) + str(ship._rows[idx]))
 
 
     def display_field(self, ships):

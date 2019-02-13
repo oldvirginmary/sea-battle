@@ -1,4 +1,4 @@
-def _is_located_correctly(ship, field):
+def _is_located_correctly(ship, ships, field):
 
     def _is_same_values(some_list):
         first = some_list[0]
@@ -37,6 +37,10 @@ def _is_located_correctly(ship, field):
 
     for square in ship.location:
         if square in field._ships_field:
+            return False
+
+    for another_ship in ships:
+        if ship.location == another_ship.location and ship.name != another_ship.name:
             return False
 
     return True
