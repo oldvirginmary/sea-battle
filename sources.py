@@ -9,14 +9,28 @@ class Field:
         self.owner = owner.name
         self.field = self.make_field()
 
-
-    def arrange_ship(self, ship_location):
-        for cell in ship_location:
-            self.field[cell] = 'o'
+        self._ships_field = []
 
 
-    def display_field(self):
-        print('Field of {}:'.format(self.owner))
+    def _make_ship_field(self, ship):
+        for idx, column in enumerate(ship._columns):
+            self._ships_field.append(str(column + 1) + str(ship._rows[idx] + 1))
+            self._ships_field.append(str(column - 1) + str(ship._rows[idx] - 1))
+            self._ships_field.append(str(column + 1) + str(ship._rows[idx] - 1))
+            self._ships_field.append(str(column - 1) + str(ship._rows[idx] + 1))
+            self._ships_field.append(str(column) + str(ship._rows[idx] + 1))
+            self._ships_field.append(str(column) + str(ship._rows[idx] - 1))
+            self._ships_field.append(str(column + 1) + str(ship._rows[idx]))
+            self._ships_field.append(str(column - 1) + str(ship._rows[idx]))
+
+
+    def display_field(self, ships):
+
+        for ship in ships:
+            for place in ship.location:
+                    self.field[place] = 'o'
+
+        print('\nField of {}:'.format(self.owner))
         print('''
              A   B   C   D   E   F   G   H   I   J
            +---+---+---+---+---+---+---+---+---+---+
@@ -47,7 +61,7 @@ class Field:
     @staticmethod
     def make_field():
 
-        columns = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
+        columns = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
         rows = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
         cells = []
 
@@ -66,4 +80,13 @@ class Ship(Field):
         self.size = size
         self.name = name
         self.owner = owner
-        self.location = None
+        self.location = []
+
+        self._columns = []
+        self._rows = []
+        self._ship_field = []
+
+
+    def make_location(self):
+        for idx, column in enumerate(self._columns):
+            self.location.append(str(column) + str(self._rows[idx]))

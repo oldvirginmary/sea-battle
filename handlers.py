@@ -1,61 +1,72 @@
-def _is_located_correctly(ship_location, user_field):
+def _is_located_correctly(ship, ships, field):
 
     def _is_same_values(some_list):
         first = some_list[0]
-
         for i in some_list:
             if i != first:
                 return False
-
         return True
 
 
-    columns = []
-    rows = []
+    if _is_same_values(ship._columns):
+        ship._rows = [int(i) for i in sorted(ship._rows)]
 
-    for cell in ship_location:
-        columns.append(cell[0])
-        rows.append(cell[1])
+        if len(ship._rows) != len(set(ship._rows)):
+            return False
 
-
-    if _is_same_values(columns):
-        rows = [int(i) for i in sorted(rows)]
-
-        for idx, n in enumerate(rows):
-            if n == rows[-1] or rows[idx+1] - n == 1:
+        for idx, n in enumerate(ship._rows):
+            if n == ship._rows[-1] or ship._rows[idx+1] - n == 1:
                 pass
             else:
                 return False
 
-        return True
+    elif _is_same_values(ship._rows):
+        ship._columns = [int(i) for i in sorted(ship._columns)]
 
+        if len(ship._columns) != len(set(ship._columns)):
+            return False
 
-    elif _is_same_values(rows):
-        ship_location = sorted(ship_location)
-        user_field = list(user_field.field.keys())
-
-        for idx, cell in enumerate(ship_location):
-            if cell == ship_location[-1] or user_field.index(ship_location[idx+1]) - user_field.index(cell) == 1:
+        for idx, n in enumerate(ship._columns):
+            if n == ship._columns[-1] or ship._columns[idx+1] - n == 1:
                 pass
             else:
                 return False
-
-        return True
-
 
     else:
         return False
 
+    for square in ship.location:
+        if square in field._ships_field:
+            return False
+
+    for another_ship in ships:
+        if ship.location == another_ship.location and ship.name != another_ship.name:
+            return False
+
+    return True
 
 
+def _input_columns():
+    nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
 
-    # if _is_same_values(rows):
-    #     columns = sorted(columns)
-    #
-    #     for n in columns:
-    #         if n user_field or n[idx+1] - idx:
-    #             pass
-    #         else:
-    #             return False
-    #
-    #     return True
+    try:
+        letter = input('Column: ').lower()
+        return nums[letters.index(letter)]
+    except ValueError:
+        print('\nIncorrect column! Expected: A - J\n')
+        return _input_columns()
+
+
+def _input_rows():
+    try:
+        num = int(input('Row: '))
+    except ValueError:
+        print('\nInsert the number 0 - 10\n')
+        return _input_rows()
+
+    if num not in range(11):
+        print('\nThere is no this row! Expected: 0 - 10\n')
+        return _input_rows()
+
+    return num
