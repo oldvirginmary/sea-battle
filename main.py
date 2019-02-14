@@ -1,25 +1,25 @@
 import random
 
 from sources import (
-    User,
+    Player,
     Field,
-    Ship
+    Ship,
+    Shots
 )
 
 from handlers import (
     _is_located_correctly,
-    _input_columns,
-    _input_rows
+    _handle_input
 )
 
 from generators import generation
 
 
 def make_players():
-    user = User(input('\nInput username: '))
+    user = Player(input('\nInput username: '))
     print('Let\'s battle, {}!'.format(user.name))
 
-    PC = User('PC')
+    PC = Player('PC')
 
     return user, PC
 
@@ -63,36 +63,35 @@ def make_ships():
     return user_ships, PC_ships
 
 
-def ship_placement(user_ships, PC_ships, user_field, PC_field):
+def ship_placement(user_ships, PC_ships, user_field, PC_field, user_shots, PC_shots):
 
-    for ship in user_ships:
-
-        def user_placement(ship):
-            user_field.display_field(user_ships)
-            print('Place a ship of size {} on the field'.format(ship.size))
-
-            for size in range(ship.size):
-                ship._columns.append(_input_columns()) #1, 2, ..., 10
-                ship._rows.append(_input_rows()) #1, 2, ..., 10
-                ship.make_location()
-
-            #for check ship placement according common sense
-            if not _is_located_correctly(ship, user_ships, user_field):
-                print('\nIncorrect location!\n')
-                ship.location = []
-                ship._columns = []
-                ship._rows = []
-
-                return user_placement(ship)
-
-            #for check ship placement according game rule
-            user_field._make_ship_field(ship)
-
-        user_placement(ship)
-
+    # for ship in user_ships:
+    #     def user_placement(ship):
+    #         user_field.display_field(user_ships, user_shots)
+    #         print('Place a ship of size {} on the field'.format(ship.size))
+    #
+    #         for size in range(ship.size):
+    #             column, row = _handle_input()
+    #             ship._columns.append(column)
+    #             ship._rows.append(row)
+    #         ship.make_location()
+    #
+    #         #for check ship placement according common sense
+    #         if not _is_located_correctly(ship, user_ships, user_field):
+    #             print('\nIncorrect location!\n')
+    #             ship.location = []
+    #             ship._columns = []
+    #             ship._rows = []
+    #
+    #             return user_placement(ship)
+    #
+    #         #for check ship placement according game rule
+    #         user_field._make_ship_field(ship)
+    #         print(ship.location)
+    #
+    #     user_placement(ship)
 
     for ship in PC_ships:
-
         def PC_placement(ship):
             position = random.choice(['horizontal', 'vertical'])
 
@@ -112,20 +111,48 @@ def ship_placement(user_ships, PC_ships, user_field, PC_field):
 
         PC_placement(ship)
 
-    user_field.display_field(user_ships)
-    PC_field.display_field(PC_ships)
+    # user_field.display_field(user_ships, user_shots)
+    PC_field.display_field(PC_ships, PC_shots)
 
 
+def make_shots(user, PC):
+    user_shots = Shots(user)
+    PC_shots = Shots(PC)
 
+    return user_shots, PC_shots
+
+
+def shoot(shots, field, ships):
+    while True:
+        print('\nYour turn!\n')
+        column, row = _handle_input()
+        shots._columns.append(column)
+        shots._rows.append(row)
+        shots.make_location()
+        
+        # if not _is_shoot_correct():
+        #     del shots._columns[-1]
+        #     del shots._rows[-1]
+        #     return shoot(shots, field, ships)
+
+        field.display_field(ships, shots)
+        print(shots.location)
 
 
 def main():
     user, PC = make_players()
     user_field, PC_field = make_fields(user, PC)
     user_ships, PC_ships = make_ships()
-    ship_placement(user_ships, PC_ships, user_field, PC_field)
+    user_shots, PC_shots = make_shots(user, PC)
+    ship_placement(user_ships, PC_ships, user_field, PC_field, user_shots, PC_shots)
+    player = Player.whose_move()
 
+    moving_player = next(player)
 
+    if moving_player == 'user':
+        shoot(user_shots, PC_field, PC_ships)
+    elif moving_player == 'PC':
+        shoot(PC_shots, user_field, user_ships)
 
 
 if __name__ == '__main__':
