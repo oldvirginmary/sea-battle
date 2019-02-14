@@ -1,6 +1,15 @@
-class User:
+import itertools
+
+
+class Player:
     def __init__(self, name):
         self.name = name
+
+    @staticmethod
+    def whose_move():
+        players = ['user', 'PC']
+        for player in itertools.cycle(players):
+            yield player
 
 
 
@@ -24,11 +33,14 @@ class Field:
             self._ships_field.append(str(column - 1) + str(ship._rows[idx]))
 
 
-    def display_field(self, ships):
+    def display_field(self, ships, shots):
 
         for ship in ships:
             for place in ship.location:
                     self.field[place] = 'o'
+
+        for shot in shots.location:
+            self.field[shot] = 'x'
 
         print('\nField of {}:'.format(self.owner))
         print('''
@@ -88,5 +100,16 @@ class Ship(Field):
 
 
     def make_location(self):
+        print('_columns: {}, _rows: {}, location: {}'.format(self._columns, self._rows, self.location))
         for idx, column in enumerate(self._columns):
             self.location.append(str(column) + str(self._rows[idx]))
+
+
+
+class Shots(Ship):
+    def __init__(self, owner):
+        self.location = []
+        self.owner = owner.name
+
+        self._columns = []
+        self._rows = []

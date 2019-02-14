@@ -45,28 +45,56 @@ def _is_located_correctly(ship, ships, field):
 
     return True
 
+#
+# def _input_columns():
+#     nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+#     letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
+#
+#     try:
+#         letter = input('Column: ').lower()
+#         return nums[letters.index(letter)]
+#     except ValueError:
+#         print('\nIncorrect column! Expected: A - J\n')
+#         return _input_columns()
+#
+#
+# def _input_rows():
+#     try:
+#         num = int(input('Row: '))
+#     except ValueError:
+#         print('\nInsert the number 0 - 10\n')
+#         return _input_rows()
+#
+#     if num not in range(11):
+#         print('\nThere is no this row! Expected: 0 - 10\n')
+#         return _input_rows()
+#
+#     return num
 
-def _input_columns():
+
+def _handle_input():
     nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
 
+    location = input('Input location: ').lower()
+
+    letter = location[0]
+    num = location[1:]
+
     try:
-        letter = input('Column: ').lower()
-        return nums[letters.index(letter)]
+        column = nums[letters.index(letter)]
     except ValueError:
-        print('\nIncorrect column! Expected: A - J\n')
-        return _input_columns()
+        print('\nIncorrect location! True input: f2, b7, etc.\n')
+        return _handle_input()
 
-
-def _input_rows():
     try:
-        num = int(input('Row: '))
+        row = int(num)
     except ValueError:
-        print('\nInsert the number 0 - 10\n')
-        return _input_rows()
+        print('\nIncorrect location! True input: f2, b7, etc.\n')
+        return _handle_input()
 
-    if num not in range(11):
-        print('\nThere is no this row! Expected: 0 - 10\n')
-        return _input_rows()
+    if row not in range(11):
+        print('\nIncorrect location! Try 1 — 10\n')
+        return _handle_input()
 
-    return num
+    return column, row
