@@ -11,7 +11,6 @@ class Player:
         self.ships = []
         self._ships_field = []
 
-
     @staticmethod
     def whose_move():
         players = ['user', 'PC']
