@@ -6,14 +6,15 @@ from generators import gen_placement
 class Player:
     def __init__(self, name):
         self.name = name
-        self.field = []
+        self.field = None
         self.shots = []
         self.ships = []
         self._ships_field = []
 
     @staticmethod
-    def whose_move():
-        players = ['user', 'PC']
+    def whose_move(user, pc):
+        players = [user, pc]
+        random.shuffle(players)
         for player in itertools.cycle(players):
             yield player
 
@@ -24,14 +25,6 @@ class Field:
         self.field = self.make_field()
 
     def display_field(self, player):
-        for ship in player.ships:
-            for place in ship.location:
-                    self.field[place] = 'o'
-        # for shot in shots.location:
-        #     self.field[shot] = 'x'
-        # for field in self._ships_field:
-        #     self.field[field] = 'f'
-
         print('\nField of {}:'.format(self.owner))
         print('''
              A   B   C   D   E   F   G   H   I   J
@@ -97,9 +90,9 @@ class Ship(Field):
     @staticmethod
     def arrange_ships(player):
         # Arrange ships by columns and rows, and then check their location
+        player_field = player.field
 
         for ship in player.ships:
-
             def arrange_ship(ship):
 
                 if player.name != 'pc':
@@ -129,6 +122,10 @@ class Ship(Field):
 
                 # make 1 block field around ship
                 ship._make_ship_field(player)
+
+                # place ship on the field
+                for i in ship.location:
+                    player_field.field[i] = 'o'
 
             arrange_ship(ship)
 
@@ -192,8 +189,8 @@ class Ship(Field):
             print('neither row nor column is consistent')
             return False
 
-        for square in self.location:
-            if square in player._ships_field:
+        for i in self.location:
+            if i in player._ships_field:
                 print('can not be in field another ship')
                 return False
 
@@ -212,6 +209,21 @@ class Shot(Ship):
 
         self.columns = []
         self.rows = []
+
+    @staticmethod
+    def shoot(player, enemy):
+        enemy_field = enemy.field
+        if player.name != 'pc':
+            print('\nYour turn!\n')
+        for shot in player.shots:
+            column, row = _handle_input()
+            shot.columns.append(column)
+            shot.rows.append(row)
+            shot.location = str(shot.columns[0]) + str(shot.rows[0])
+
+            enemy_field.field[shot.location] = 'x'
+
+            enemy.field.display_field(enemy)
 
     @staticmethod
     def create_shots(player):

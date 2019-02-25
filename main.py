@@ -1,4 +1,5 @@
 import random
+from handlers import _handle_input
 from sources import (
     Player,
     Field,
@@ -23,17 +24,13 @@ def ship_placement(user, pc):
     Ship.arrange_ships(pc)
 
 
-def shoot(storage):
-    while True:
-        print('\nYour turn!\n')
-        storage.shots
-        column, row = _handle_input()
-        shot.columns.append(column)
-        shot.rows.append(row)
-        shot.make_location()
+def start(user, pc):
+    player = Player.whose_move(user, pc)
 
-        field.display_field(ships, shots)
-        print(shots.location)
+    while True:
+        moving_player = next(player)
+        if moving_player == user:
+            Shot.shoot(user, pc)
 
 
 def main():
@@ -43,15 +40,7 @@ def main():
     create_resources(user, pc)
     ship_placement(user, pc)
 
-    # player = Player.whose_move()
-    #
-    # moving_player = next(player)
-    #
-    # if moving_player == 'user':
-    #     shoot(user_shots, pc_field, pc_ships)
-    #     field.display_field(storage)
-    # elif moving_player == 'pc':
-    #     shoot(pc_shots, user_field, user_ships)
+    start(user, pc)
 
 
 if __name__ == '__main__':
