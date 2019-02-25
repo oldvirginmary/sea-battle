@@ -1,4 +1,6 @@
-import itertools
+import itertools, random
+from handlers import _handle_input
+from generators import gen_placement
 
 
 class Player:
@@ -84,7 +86,6 @@ class Ship(Field):
         self.columns = []
         self.rows = []
 
-
     @staticmethod
     def create_ships(player):
         # Genereate 10 ships as class objects
@@ -94,6 +95,45 @@ class Ship(Field):
             exec('{} = Ship(ship_name, {}, player)'.format(ship_name, size))
             exec('player.ships.append({})'.format(ship_name))
 
+    @staticmethod
+    def arrange_ships(player):
+        # Arrange ships by columns and rows, and then check their location
+
+        for ship in player.ships:
+
+            def arrange_ship(ship):
+
+                if player.name != 'pc':
+                    player.field.display_field(player)
+                    print('Place a ship of size {} on the field'.format(ship.size))
+
+                    for size in range(ship.size):
+                        column, row = _handle_input()
+                        ship.columns.append(column)
+                        ship.rows.append(row)
+                    ship.make_location()
+
+                else:
+                    position = random.choice(['horizontal', 'vertical'])
+                    ship.columns, ship.rows = gen_placement(ship, position)
+                    ship.make_location()
+
+                # for check ship placement according common sense
+                if not ship._is_located_correctly(player):
+                    ship.location = []
+                    ship.columns = []
+                    ship.rows = []
+                    if player.name != 'pc':
+                        print('\nIncorrect location!\n')
+
+                    arrange_ship(ship)
+
+                # make 1 block field around ship
+                ship._make_ship_field(player)
+
+            arrange_ship(ship)
+
+        player.field.display_field(player)
 
     def make_location(self):
         for idx, column in enumerate(self.columns):
@@ -154,7 +194,6 @@ class Ship(Field):
             return False
 
         for square in self.location:
-            print(player)
             if square in player._ships_field:
                 print('can not be in field another ship')
                 return False

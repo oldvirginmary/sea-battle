@@ -1,15 +1,10 @@
 import random
-
 from sources import (
     Player,
     Field,
     Ship,
     Shot
 )
-
-from handlers import _handle_input
-
-from generators import gen_placement
 
 
 def create_resources(user, pc):
@@ -24,54 +19,57 @@ def create_resources(user, pc):
 
 
 def ship_placement(user, pc):
+    Ship.arrange_ships(user)
+    Ship.arrange_ships(pc)
 
-    for ship in user.ships:
-        def user_placement(ship):
-            user.field.display_field(user)
-            print('Place a ship of size {} on the field'.format(ship.size))
 
-            for size in range(ship.size):
-                column, row = _handle_input()
-                ship.columns.append(column)
-                ship.rows.append(row)
-            ship.make_location()
-
-            #for check ship placement according common sense
-            if not ship._is_located_correctly(user):
-                print('\nIncorrect location!\n')
-                ship.location = []
-                ship.columns = []
-                ship.rows = []
-
-                return user_placement(ship)
-
-            #for check ship placement according game rule
-            ship._make_ship_field(user)
-
-        user_placement(ship)
-
-    for ship in pc.ships:
-        def pc_placement(ship):
-            position = random.choice(['horizontal', 'vertical'])
-
-            ship.columns, ship.rows = gen_placement(ship, position)
-            ship.make_location()
-
-            #for check ship placement according common sense
-            if not ship._is_located_correctly(pc):
-                ship.location = []
-                ship.columns = []
-                ship.rows = []
-
-                return pc_placement(ship)
-
-            #for check ship placement according game rule
-            ship._make_ship_field(pc)
-
-        pc_placement(ship)
-
-    user.field.display_field(user)
-    pc.field.display_field(pc)
+    # for ship in user.ships:
+    #     def user_placement(ship):
+    #         user.field.display_field(user)
+    #         print('Place a ship of size {} on the field'.format(ship.size))
+    #
+    #         for size in range(ship.size):
+    #             column, row = _handle_input()
+    #             ship.columns.append(column)
+    #             ship.rows.append(row)
+    #         ship.make_location()
+    #
+    #         #for check ship placement according common sense
+    #         if not ship._is_located_correctly(user):
+    #             print('\nIncorrect location!\n')
+    #             ship.location = []
+    #             ship.columns = []
+    #             ship.rows = []
+    #
+    #             return user_placement(ship)
+    #
+    #         #for check ship placement according game rule
+    #         ship._make_ship_field(user)
+    #
+    #     user_placement(ship)
+    #
+    # for ship in pc.ships:
+    #     def pc_placement(ship):
+    #         position = random.choice(['horizontal', 'vertical'])
+    #
+    #         ship.columns, ship.rows = gen_placement(ship, position)
+    #         ship.make_location()
+    #
+    #         #for check ship placement according common sense
+    #         if not ship._is_located_correctly(pc):
+    #             ship.location = []
+    #             ship.columns = []
+    #             ship.rows = []
+    #
+    #             return pc_placement(ship)
+    #
+    #         #for check ship placement according game rule
+    #         ship._make_ship_field(pc)
+    #
+    #     pc_placement(ship)
+    #
+    # user.field.display_field(user)
+    # pc.field.display_field(pc)
 
 
 def shoot(storage):
@@ -93,8 +91,6 @@ def main():
 
     create_resources(user, pc)
     ship_placement(user, pc)
-
-    print(pc.ships[9].size, user.ships[4].name)
 
     # player = Player.whose_move()
     #
